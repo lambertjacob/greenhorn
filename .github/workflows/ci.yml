@@ -10,26 +10,45 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+     
       - name: Set up node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+     
       - name: Install dependencies
         run: npm install
         working-directory: apps/api
 
-      - name: Run tests
+      - name: Run health check
         run: |
           node src/index.js & 
           sleep 5
           curl --fail http://localhost:3000/health
         working-directory: apps/api
+      
+      - name: Test take webhooks
+        run: | 
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST http://localhost:3000/webhook/sms \
+            -d "Body=hello&From=+1234567890")
+          if [ "$RESPONSE" != "403" ]; then
+            echo "Expected 403 but got $RESPONSE"
+            exit 1
+          fi
+          echo "Security check passed — unsigned requests correctly rejected"
+        env:
+          NODE_ENV: production
+          TWILIO_AUTH_TOKEN: fake_token
+          WEBHOOK_URL: http://localhost:3000
+      
+  
   docker-build:
     runs-on: ubuntu-latest
     needs: health-check
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      
       - name: Build Docker image
         run: docker build -t greenhorn-api .
         working-directory: apps/api

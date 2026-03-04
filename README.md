@@ -58,3 +58,5 @@ webhook.js wraps reply in Twilio XML
         ↓
 Twilio delivers it as sms to user
 ```
+## security
+every request to `/webhook/sms` is validated against Twilio signature before being processed. This ensures fake requests do not use Claude API tokens. 
