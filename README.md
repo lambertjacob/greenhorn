@@ -41,3 +41,20 @@ Every push to `main`:
 1. Starts the server and hits `/health`
 2. Builds the Docker image
 3. Railway auto-deploys if both pass
+
+## sms idea
+```
+user texts Twilio number
+        ↓
+Twilio POSTs to /webhook/sms
+        ↓
+webhook.js pulls body/from req.body
+        ↓
+reply.js sends message/history to Claude
+        ↓
+Claude replies
+        ↓
+webhook.js wraps reply in Twilio XML
+        ↓
+Twilio delivers it as sms to user
+```

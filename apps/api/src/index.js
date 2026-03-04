@@ -1,4 +1,5 @@
 import express from "express";
+import { handleIncomingSMS } from "./webhook.js";
 
 //server initialization
 const greenhorn = express();
@@ -12,7 +13,10 @@ greenhorn.listen(PORT, () => {
 greenhorn.use(express.json());
 greenhorn.use(express.urlencoded({ extended: true }));
 
-//server healht check
+//server health check
 greenhorn.get("/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
+
+//webhook endpoint for incoming SMS
+greenhorn.post("/webhook/sms", handleIncomingSMS);
