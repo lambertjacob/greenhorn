@@ -8,7 +8,7 @@ function isValidTwilioRequest(req) {
   const webhookUrl = `${process.env.WEBHOOK_URL}`;
   const params = req.body;
 
-  return validateRequest(
+  return twilio.validateRequest(
     process.env.TWILIO_AUTH_TOKEN,
     twilioSignature,
     webhookUrl,
