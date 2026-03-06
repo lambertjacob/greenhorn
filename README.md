@@ -60,3 +60,17 @@ Twilio delivers it as sms to user
 ```
 ## security
 every request to `/webhook/sms` is validated against Twilio signature before being processed. This ensures fake requests do not use Claude API tokens. 
+
+## database schema
+```
+users                appointments           availability
+─────────────────    ──────────────────    ──────────────────
+id                   id                    id
+phone_number         user_id               start_time
+name                 availability_id       end_time
+created_at           status                is_booked
+
+## example
+
+![example of interaction](assets/interaction.png)
+       
