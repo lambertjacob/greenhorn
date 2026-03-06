@@ -6,7 +6,11 @@ import cors from "cors";
 
 //server initialization
 const greenhorn = express();
-greenhorn.use(cors());
+greenhorn.use(cors({ 
+  origin: [
+    process.env.DASHBOARD_URL,
+  ] 
+}));
 const PORT = process.env.PORT || 3000;
 
 greenhorn.listen(PORT, () => {
